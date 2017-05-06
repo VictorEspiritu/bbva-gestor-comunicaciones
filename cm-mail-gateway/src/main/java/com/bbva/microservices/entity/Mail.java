@@ -1,7 +1,6 @@
 package com.bbva.microservices.entity;
 
-import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -11,7 +10,8 @@ public class Mail {
 	private String id;
 	private String toMail;
 	private String fromMail;
-	private Set<String> ccMail;
+	private List<String> ccMail;
+	private String subject;
 	private String mTitle;
 	private String mBody;
 	private String mSign;
@@ -21,16 +21,21 @@ public class Mail {
 	}
 	
 
-	public Mail( String toMail, String fromMail, Set<String> ccMail, String mTitle, String mBody,
-			String mSign) {
+	
+
+	public Mail(String toMail, String fromMail, List<String> ccMail, String subject, String mTitle,
+			String mBody, String mSign) {
 		super();
 		this.toMail = toMail;
 		this.fromMail = fromMail;
 		this.ccMail = ccMail;
+		this.subject = subject;
 		this.mTitle = mTitle;
 		this.mBody = mBody;
 		this.mSign = mSign;
 	}
+
+
 
 
 	public String getId() {
@@ -57,11 +62,11 @@ public class Mail {
 		this.fromMail = fromMail;
 	}
 
-	public Set<String> getCcMail() {
+	public List<String> getCcMail() {
 		return ccMail;
 	}
 
-	public void setCcMail(Set<String> ccMail) {
+	public void setCcMail(List<String> ccMail) {
 		this.ccMail = ccMail;
 	}
 
@@ -89,26 +94,36 @@ public class Mail {
 		this.mSign = mSign;
 	}
 
+	public String getSubject() {
+		return subject;
+	}
+
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("{ \"id\":\"");
+		builder.append("{\"Mail\": [ \"id\":\"");
 		builder.append(id);
 		builder.append("\", \"toMail\":\"");
 		builder.append(toMail);
 		builder.append("\", \"fromMail\":\"");
 		builder.append(fromMail);
-		builder.append("\", \"ccMail\":");
-		builder.append(ccMail);
-		builder.append(", \"mTitle\":\"");
+		builder.append("\", \"subject\":\"");
+		builder.append(subject);
+		builder.append("\", \"mTitle\":\"");
 		builder.append(mTitle);
 		builder.append("\", \"mBody\":\"");
 		builder.append(mBody);
 		builder.append("\", \"mSign\":\"");
 		builder.append(mSign);
-		builder.append("\"}");
+		builder.append("\"]}");
 		return builder.toString();
 	}
-	
+
+
 	
 }

@@ -1,5 +1,6 @@
 package com.bbva.microservices.entity;
 
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,7 +11,8 @@ public class Mail {
 	private String id;
 	private String toMail;
 	private String fromMail;
-	private Set<String> ccMail;
+	private List<String> ccMail;
+	private String subject;
 	private String mTitle;
 	private String mBody;
 	private String mSign;
@@ -20,15 +22,28 @@ public class Mail {
 	}
 	
 
-	public Mail( String toMail, String fromMail, Set<String> ccMail, String mTitle, String mBody,
+	public Mail(String toMail, String fromMail, List<String> ccMail, String subject, String mTitle, String mBody,
 			String mSign) {
 		super();
 		this.toMail = toMail;
 		this.fromMail = fromMail;
 		this.ccMail = ccMail;
+		this.subject = subject;
 		this.mTitle = mTitle;
 		this.mBody = mBody;
 		this.mSign = mSign;
+	}
+
+
+
+
+	public String getSubject() {
+		return subject;
+	}
+
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 
@@ -56,11 +71,11 @@ public class Mail {
 		this.fromMail = fromMail;
 	}
 
-	public Set<String> getCcMail() {
+	public List<String> getCcMail() {
 		return ccMail;
 	}
 
-	public void setCcMail(Set<String> ccMail) {
+	public void setCcMail(List<String> ccMail) {
 		this.ccMail = ccMail;
 	}
 
