@@ -3,3 +3,5 @@
 .settings
 target/
 .mvn/
+cm-mail-gateway/logs
+

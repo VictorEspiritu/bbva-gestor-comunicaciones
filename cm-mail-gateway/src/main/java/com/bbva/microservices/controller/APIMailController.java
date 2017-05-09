@@ -26,6 +26,6 @@ public class APIMailController {
 	String getSatus(@RequestBody Message message){
 		message.setId(UUID.randomUUID().toString());
 		kafkaComponent.putMessageOne(message);
-		return "OK";
+		return message.getId();
 	}
 }

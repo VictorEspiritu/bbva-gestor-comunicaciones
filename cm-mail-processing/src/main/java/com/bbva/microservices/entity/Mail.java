@@ -16,6 +16,8 @@ public class Mail {
 	private String mTitle;
 	private String mBody;
 	private String mSign;
+	private String nameAttachment;
+
 		
 	public Mail() {
 		// TODO Auto-generated constructor stub
@@ -23,7 +25,7 @@ public class Mail {
 	
 
 	public Mail(String toMail, String fromMail, List<String> ccMail, String subject, String mTitle, String mBody,
-			String mSign) {
+			String mSign, String nameAttachment) {
 		super();
 		this.toMail = toMail;
 		this.fromMail = fromMail;
@@ -32,9 +34,8 @@ public class Mail {
 		this.mTitle = mTitle;
 		this.mBody = mBody;
 		this.mSign = mSign;
+		this.nameAttachment = nameAttachment;
 	}
-
-
 
 
 	public String getSubject() {
@@ -103,10 +104,20 @@ public class Mail {
 		this.mSign = mSign;
 	}
 
+	public String getNameAttachment() {
+		return nameAttachment;
+	}
+
+
+	public void setNameAttachment(String nameAttachment) {
+		this.nameAttachment = nameAttachment;
+	}
+
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("{ \"id\":\"");
+		builder.append("{\"Mail\": [ \"id\":\"");
 		builder.append(id);
 		builder.append("\", \"toMail\":\"");
 		builder.append(toMail);
@@ -114,13 +125,17 @@ public class Mail {
 		builder.append(fromMail);
 		builder.append("\", \"ccMail\":\"");
 		builder.append(ccMail);
+		builder.append("\", \"subject\":\"");
+		builder.append(subject);
 		builder.append("\", \"mTitle\":\"");
 		builder.append(mTitle);
 		builder.append("\", \"mBody\":\"");
 		builder.append(mBody);
 		builder.append("\", \"mSign\":\"");
 		builder.append(mSign);
-		builder.append("\"}");
+		builder.append("\", \"nameAttachment\":\"");
+		builder.append(nameAttachment);
+		builder.append("\"]}");
 		return builder.toString();
 	}
 	
