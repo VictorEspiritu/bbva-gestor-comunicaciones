@@ -12,8 +12,7 @@ public class SimplePartitioner implements Partitioner{
     private static final Logger log = LoggerFactory.getLogger(SimplePartitioner.class);
 
     @Override
-    public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
-        log.info("Partition: {}", (Math.abs(key.hashCode() % cluster.partitionCountForTopic(topic))));
+    public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {        
         return Math.abs(key.hashCode() % cluster.partitionCountForTopic(topic));
     }
 

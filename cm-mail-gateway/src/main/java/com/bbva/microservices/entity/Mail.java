@@ -116,7 +116,7 @@ public class Mail {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("{\"Mail\": [ \"id\":\"");
+		builder.append("\"Mail\" = { \"id\":\"");
 		builder.append(id);
 		builder.append("\", \"toMail\":\"");
 		builder.append(toMail);
@@ -134,9 +134,8 @@ public class Mail {
 		builder.append(mSign);
 		builder.append("\", \"nameAttachment\":\"");
 		builder.append(nameAttachment);
-		builder.append("\"]}");
+		builder.append("\"}");
 		return builder.toString();
 	}
-	
 	
 }

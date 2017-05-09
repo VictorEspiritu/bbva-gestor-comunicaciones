@@ -13,7 +13,6 @@ public class Message {
 	private String channel;
 	private Integer priority;
 	private Long idTemplate;
-	
 	private Mail mail;
 	
 	public Message() {
@@ -76,7 +75,7 @@ public class Message {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("{\"id\":\"");
+		builder.append("\"Message\" = { \"id\":\"");
 		builder.append(id);
 		builder.append("\", \"dateIn\":\"");
 		builder.append(dateIn);
@@ -88,11 +87,13 @@ public class Message {
 		builder.append(priority);
 		builder.append("\", \"idTemplate\":\"");
 		builder.append(idTemplate);
-		builder.append("\", \"mail\":");
+		builder.append("\", \"mail\":\"");
 		builder.append(mail);
-		builder.append("}");
+		builder.append("\"}");
 		return builder.toString();
 	}
+
+	
 	
 	
 }

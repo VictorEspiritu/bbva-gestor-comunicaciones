@@ -23,9 +23,16 @@ public class APIMailController {
 	}
 	
 	@RequestMapping( value="/add", method=RequestMethod.POST)
-	String getSatus(@RequestBody Message message){
+	String addMail(@RequestBody Message message){
 		message.setId(UUID.randomUUID().toString());
-		kafkaComponent.putMessageOne(message);
+		kafkaComponent.putMessage(message);
+		return message.getId();
+	}
+	
+	@RequestMapping( value="/attach/add", method=RequestMethod.POST)
+	String addMailAttachment(@RequestBody Message message){
+		message.setId(UUID.randomUUID().toString());
+		kafkaComponent.putMessageAttach(message);
 		return message.getId();
 	}
 }

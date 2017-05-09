@@ -20,10 +20,12 @@ public class KafkaComponent {
 
 	private static Logger log = LoggerFactory.getLogger(KafkaComponent.class);
 
-	@Value("${kafka.host:locahost}")
+	@Value("${kafka.host}")
 	private String host;
-	@Value("${kafka.topic:esev}")
-	private String topic;
+	@Value("${kafka.topic.mail}")
+	private String mailTopic;
+	@Value("${kafka.topic.mail.attach}")
+	private String mailAttachTopic;
 	@Value("${kafka.partition.class}")
 	private String partitionClass;
 	@Value("${kafka.serializer.key.in}")
@@ -35,7 +37,7 @@ public class KafkaComponent {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void putMessage(Integer count) {
+	public void putMessage(Message message) {
 
 		Properties props1 = new Properties();
 		props1.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
@@ -44,39 +46,36 @@ public class KafkaComponent {
 		props1.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, partitionClass);
 
 		Producer<String, String> producer = new KafkaProducer<>(props1);
-
-		for (int i = 0; i < count; i++) {
-			String key = String.format("key[%d]", i);
-			String message = String.format("message[%d]", i);
-			log.info("Sending message with: {}", key);
-			producer.send(new ProducerRecord<>(topic, key, message));
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				log.warn("WARN : {}", e.getMessage());
-			}
-		}
-
-		producer.flush();
-		producer.close();
-	}
-
-	public void putMessageOne(Message message) {
-
-		Properties props1 = new Properties();
-		props1.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
-		props1.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, serializerKeyIn);
-		props1.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, serializerValueIn);
-		props1.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, partitionClass);
-
-		Producer<String, String> producer = new KafkaProducer<>(props1);
-
 		
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			String jsonInString = mapper.writeValueAsString(message);
 			log.info("Sending message with: {}", jsonInString);
-			producer.send(new ProducerRecord<>(topic,message.getId(), jsonInString));
+			producer.send(new ProducerRecord<>(mailTopic, message.getId(), jsonInString));
+
+		} catch (JsonProcessingException e) {
+			log.info("Error Parse to JSON {}", e.getMessage());
+		}
+		
+		producer.flush();
+		producer.close();
+	}
+	
+	public void putMessageAttach(Message message) {
+
+		Properties props1 = new Properties();
+		props1.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host);
+		props1.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, serializerKeyIn);
+		props1.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, serializerValueIn);
+		props1.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, partitionClass);
+
+		Producer<String, String> producer = new KafkaProducer<>(props1);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			String jsonInString = mapper.writeValueAsString(message);
+			log.info("Sending message with Attachment: {}", jsonInString);
+			producer.send(new ProducerRecord<>(mailAttachTopic, message.getId(), jsonInString));
 
 		} catch (JsonProcessingException e) {
 			log.info("Error Parse to JSON {}", e.getMessage());
