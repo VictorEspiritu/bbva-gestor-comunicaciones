@@ -1,0 +1,14 @@
+
+server:
+  port: 7015
+  
+management:
+  security:
+    enabled: false
+    
+spring: 
+  application:
+    name: mail-gateway-service
+  cloud:
+    config:
+      uri: http://localhost:7888

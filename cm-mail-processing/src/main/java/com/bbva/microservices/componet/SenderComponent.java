@@ -6,15 +6,16 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.bbva.microservices.dto.Email;
-import com.bbva.microservices.dto.Response;
 import com.bbva.microservices.entity.Message;
 
 @Component
+@RefreshScope
 public class SenderComponent {
 	
 	private static Logger log = LoggerFactory.getLogger(SenderComponent.class);
@@ -37,9 +38,9 @@ public class SenderComponent {
 		
 		log.info("E-Mail send: {}", email);
 		
-		Response rpta = restTemplate.postForObject(urlSender, email, Response.class);
+//		Response rpta = restTemplate.postForObject(urlSender, email, Response.class);
 		
-		log.info("Response sender: {}", rpta);
+		log.info("Response sender: {}", "");
 	}
 	
 	public void sendMailAttachment(Message message, String mail, FileSystemResource file){
@@ -55,8 +56,8 @@ public class SenderComponent {
 		
 		log.info("E-Mail send: {}", email);
 		
-		Response rpta = restTemplate.postForObject(urlSender, email, Response.class);
+//		Response rpta = restTemplate.postForObject(urlSender, email, Response.class);
 		
-		log.info("Response sender: {}", rpta);
+		log.info("Response sender: {}", "");
 	}
 }

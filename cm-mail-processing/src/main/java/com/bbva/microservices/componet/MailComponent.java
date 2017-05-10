@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
+@RefreshScope
 public class MailComponent {
 
 	private static final Logger log = LoggerFactory.getLogger(MailComponent.class);
@@ -68,16 +70,17 @@ public class MailComponent {
 			chTemplate = chTemplate.replace(templateBody, message.getMail().getmBody());
 			chTemplate = chTemplate.replace(templateSign, message.getMail().getmSign());
 			chTemplate = chTemplate.replace(templateDisc, "BBVA Continental - Area de Ventas");
-
+			
+			log.info("Message Parse: {}", chTemplate);
+			
 			log.info("Send Mailing");
-
 			senderComponent.sendMail(message, chTemplate);
 
 		} catch (Exception e) {
 			log.info("ERROR: {}", e.getMessage());
 		}
 
-		log.info("Message Parse: {}", chTemplate);
+		
 	}
 
 	public void processMailAttach(String data) {
@@ -109,9 +112,9 @@ public class MailComponent {
 			chTemplate = chTemplate.replace(templateBody, message.getMail().getmBody());
 			chTemplate = chTemplate.replace(templateSign, message.getMail().getmSign());
 			chTemplate = chTemplate.replace(templateDisc, "BBVA Continental - Area de Ventas");
+			log.info("Message Parse: {}", chTemplate);
 
 			log.info("Send Mailing");
-
 			String[] datos = message.getMail().getNameAttachment().split("\\.");
 
 			FileSystemResource obj = new FileSystemResource(
@@ -123,8 +126,6 @@ public class MailComponent {
 		} catch (Exception e) {
 			log.info("ERROR: {}", e.getMessage());
 		}
-
-		log.info("Message Parse: {}", chTemplate);
 	}
 
 }
