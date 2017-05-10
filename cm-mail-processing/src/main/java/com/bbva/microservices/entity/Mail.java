@@ -1,7 +1,6 @@
 package com.bbva.microservices.entity;
 
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -18,11 +17,9 @@ public class Mail {
 	private String mSign;
 	private String nameAttachment;
 
-		
 	public Mail() {
 		// TODO Auto-generated constructor stub
 	}
-	
 
 	public Mail(String toMail, String fromMail, List<String> ccMail, String subject, String mTitle, String mBody,
 			String mSign, String nameAttachment) {
@@ -37,16 +34,13 @@ public class Mail {
 		this.nameAttachment = nameAttachment;
 	}
 
-
 	public String getSubject() {
 		return subject;
 	}
 
-
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-
 
 	public String getId() {
 		return id;
@@ -108,16 +102,14 @@ public class Mail {
 		return nameAttachment;
 	}
 
-
 	public void setNameAttachment(String nameAttachment) {
 		this.nameAttachment = nameAttachment;
 	}
 
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("{\"Mail\": [ \"id\":\"");
+		builder.append("\"Mail\" = { \"id\":\"");
 		builder.append(id);
 		builder.append("\", \"toMail\":\"");
 		builder.append(toMail);
@@ -135,9 +127,8 @@ public class Mail {
 		builder.append(mSign);
 		builder.append("\", \"nameAttachment\":\"");
 		builder.append(nameAttachment);
-		builder.append("\"]}");
+		builder.append("\"}");
 		return builder.toString();
 	}
-	
-	
+
 }

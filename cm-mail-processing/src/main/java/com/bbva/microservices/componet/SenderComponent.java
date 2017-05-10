@@ -1,13 +1,10 @@
 package com.bbva.microservices.componet;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
@@ -16,10 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import com.bbva.microservices.dto.Email;
 import com.bbva.microservices.dto.Response;
 import com.bbva.microservices.entity.Message;
-import com.bbva.microservices.entity.Template;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class SenderComponent {
@@ -28,70 +21,10 @@ public class SenderComponent {
 	
 	@Value("${url.service.sender}")
 	private String urlSender;
-	
-	@Value("${url.file.server}")
-	private String urlFileServer;
-	
-	@Autowired
-	private MailComponent mailComponent;
-	
+				
 	private RestTemplate restTemplate;
-		
-	public void processMail(String data) {
-		
-		ObjectMapper mapper = new ObjectMapper();
-		Message message = null;
-		try {
-			message = mapper.readValue(data, Message.class);
-		} catch (JsonParseException e) {
-			log.info("Error JSON PARSE {}", e.getMessage());
-		} catch (JsonMappingException e) {
-			log.info("Error JSON EXCEPTION {}", e.getMessage());
-		} catch (IOException e) {
-			log.info("Error JSON IO {}", e.getMessage());
-		}		
-		
-		if(message == null)
-			return;
-
-		String chTemplate = "N";
-		try {
-			Long id = message.getIdTemplate();
-			Template mail = mailComponent.getTemplate(id);
-			Template tmp = new Template();
-			BeanUtils.copyProperties(mail, tmp);
-			chTemplate = tmp.getTemplate();
-			
-			chTemplate= chTemplate.replace("$$title$$",message.getMail().getmTitle());
-			chTemplate= chTemplate.replace("$$body$$", message.getMail().getmBody());
-			chTemplate= chTemplate.replace("$$sign$$", message.getMail().getmSign());
-			chTemplate= chTemplate.replace("$$disclamer$$", "BBVA Continental - Area de Ventas");
-			
-			log.info("Send Mailing");
-			
-			if(message.getMail().getNameAttachment() != null) {
-
-				String[] datos = message.getMail().getNameAttachment().split("\\.");
-				
-				FileSystemResource obj = new FileSystemResource(urlFileServer+message.getId()+"."+datos[datos.length-1]);
-				
-				log.info("Name File Attach {} : {}",  obj.getFile().getAbsolutePath(), obj.getFile().exists());
-				
-				sendMailAttachment(message, chTemplate,obj);
-			} else{
-				sendMail(message, chTemplate);
-			}
-
-			
-		} catch (Exception e) {
-			log.info("ERROR: {}", e.getMessage());
-		}
-		
-		log.info("Message Parse: {}", chTemplate);
-		
-	}
 	
-	private void sendMail(Message message, String mail){
+	public void sendMail(Message message, String mail){
 		restTemplate = new RestTemplate();
 		
 		Email email = new Email();
@@ -109,7 +42,7 @@ public class SenderComponent {
 		log.info("Response sender: {}", rpta);
 	}
 	
-	private void sendMailAttachment(Message message, String mail, FileSystemResource file){
+	public void sendMailAttachment(Message message, String mail, FileSystemResource file){
 		restTemplate = new RestTemplate();
 		
 		Email email = new Email();
@@ -122,7 +55,6 @@ public class SenderComponent {
 		
 		log.info("E-Mail send: {}", email);
 		
-		//TODO
 		Response rpta = restTemplate.postForObject(urlSender, email, Response.class);
 		
 		log.info("Response sender: {}", rpta);

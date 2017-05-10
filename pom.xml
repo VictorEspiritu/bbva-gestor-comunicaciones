@@ -27,6 +27,7 @@
 
 	<modules>
 		<module>cm-mail-gateway</module>
+		<module>cm-mail-processing</module>
 	</modules>
 
 	<dependencies>

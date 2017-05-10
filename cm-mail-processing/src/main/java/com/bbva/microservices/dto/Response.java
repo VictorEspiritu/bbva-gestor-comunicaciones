@@ -28,13 +28,13 @@ public class Response {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("{\"Response\": [ \"responseCode\":\"");
+		builder.append("\"Response\" = { \"responseCode\":\"");
 		builder.append(responseCode);
 		builder.append("\", \"message\":\"");
 		builder.append(message);
-		builder.append("\"]}");
+		builder.append("\"}");
 		return builder.toString();
 	}
-	
+
 	
 }

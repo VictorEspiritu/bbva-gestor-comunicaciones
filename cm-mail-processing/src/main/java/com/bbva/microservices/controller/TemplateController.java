@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bbva.microservices.componet.MailComponent;
+import com.bbva.microservices.componet.TemplateComponent;
 import com.bbva.microservices.entity.Template;
 
 
 @RestController
 @RequestMapping("/mail")
-public class ProcessController {
+public class TemplateController {
 	
-	private MailComponent mailComponent;
+	private TemplateComponent mailComponent;
 		
 	@Autowired
-	public ProcessController(MailComponent mailComponent) {
+	public TemplateController(TemplateComponent mailComponent) {
 		this.mailComponent = mailComponent;
 	}
 	

@@ -14,8 +14,6 @@ public class Email {
 	public Email() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
 	public Email(String from, List<String> to, List<String> cc, List<String> bcc, String subject, String htmlContent) {
 		super();
@@ -77,12 +75,10 @@ public class Email {
 		this.htmlContent = htmlContent;
 	}
 
-
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("{\"Email\": [ \"from\":\"");
+		builder.append("\"Email\" = { \"from\":\"");
 		builder.append(from);
 		builder.append("\", \"to\":\"");
 		builder.append(to);
@@ -94,11 +90,9 @@ public class Email {
 		builder.append(subject);
 		builder.append("\", \"htmlContent\":\"");
 		builder.append(htmlContent);
-		builder.append("\"]}");
+		builder.append("\"}");
 		return builder.toString();
 	}
-	
-	
-	
+
 	
 }	
