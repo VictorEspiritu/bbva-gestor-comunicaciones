@@ -5,23 +5,32 @@ import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.bbva.microservices.dto.Email;
+import com.bbva.microservices.dto.Response;
 import com.bbva.microservices.entity.Message;
+import com.bbva.microservices.proxy.MailServiceProxy;
 
-@Component
+@EnableFeignClients("com.bbva.microservices.proxy")
 @RefreshScope
+@Component
 public class SenderComponent {
 	
 	private static Logger log = LoggerFactory.getLogger(SenderComponent.class);
 	
 	@Value("${url.service.sender}")
 	private String urlSender;
+	
+	@Autowired
+	private MailServiceProxy mailServiceProxy;
+	
 				
 	private RestTemplate restTemplate;
 	
@@ -39,8 +48,9 @@ public class SenderComponent {
 		log.info("E-Mail send: {}", email);
 		
 //		Response rpta = restTemplate.postForObject(urlSender, email, Response.class);
+		Response rpta = mailServiceProxy.postEmail(email);
 		
-		log.info("Response sender: {}", "");
+		log.info("Response sender: {}", rpta);
 	}
 	
 	public void sendMailAttachment(Message message, String mail, FileSystemResource file){
@@ -57,7 +67,8 @@ public class SenderComponent {
 		log.info("E-Mail send: {}", email);
 		
 //		Response rpta = restTemplate.postForObject(urlSender, email, Response.class);
+		Response rpta = mailServiceProxy.postEmail(email);
 		
-		log.info("Response sender: {}", "");
+		log.info("Response sender: {}", rpta);
 	}
 }
