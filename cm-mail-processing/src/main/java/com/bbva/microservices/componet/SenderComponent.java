@@ -11,7 +11,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import com.bbva.microservices.dto.Email;
 import com.bbva.microservices.dto.Response;
@@ -31,11 +30,7 @@ public class SenderComponent {
 	@Autowired
 	private MailServiceProxy mailServiceProxy;
 	
-				
-	private RestTemplate restTemplate;
-	
 	public void sendMail(Message message, String mail){
-		restTemplate = new RestTemplate();
 		
 		Email email = new Email();
 		email.setFrom(message.getMail().getFromMail());
@@ -47,14 +42,12 @@ public class SenderComponent {
 		
 		log.info("E-Mail send: {}", email);
 		
-//		Response rpta = restTemplate.postForObject(urlSender, email, Response.class);
 		Response rpta = mailServiceProxy.postEmail(email);
 		
 		log.info("Response sender: {}", rpta);
 	}
 	
 	public void sendMailAttachment(Message message, String mail, FileSystemResource file){
-		restTemplate = new RestTemplate();
 		
 		Email email = new Email();
 		email.setFrom(message.getMail().getFromMail());
@@ -66,7 +59,6 @@ public class SenderComponent {
 		
 		log.info("E-Mail send: {}", email);
 		
-//		Response rpta = restTemplate.postForObject(urlSender, email, Response.class);
 		Response rpta = mailServiceProxy.postEmail(email);
 		
 		log.info("Response sender: {}", rpta);

@@ -1,0 +1,204 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://atlas.hashicorp.com/search.
+  config.vm.define "vm_zook0" do |zook0|
+      zook0.vm.box = "ubuntu/trusty64"
+      zook0.vm.hostname = "zook0"
+      #kafka.vm.network "public_network"
+      zook0.vm.synced_folder "data", "/vagrant_data"
+      #kafka.vm.network "forwarded_port", guest: 80, host: 9090
+      zook0.vm.network "private_network", ip: "10.11.1.100"
+      #kafka.vm.network "public_network", ip: "10.17.198.104", netmask: "255.255.248.0"
+      zook0.vm.provider "virtualbox" do |vb|
+     #   # Display the VirtualBox GUI when booting the machine
+     #   vb.gui = true
+     #
+     #   # Customize the amount of memory on the VM:
+        vb.memory = "1024"
+      end
+
+      zook0.vm.provision "shell", inline: <<-SHELL
+        ZOOKEEPER=zookeeper-3.4.10
+
+        #Ejecutamos Zookeper
+        echo "Ejecutamos Zookeper"
+        sudo $ZOOKEEPER/bin/zkServer.sh start
+
+        #Test
+        echo 'Comprobamos que el proceso de zookeeper esta ejecutandose'
+        sudo ps aux | grep zoo
+
+       SHELL
+
+  end
+
+
+  config.vm.define "vm_kafka0" do |kafka0|
+      kafka0.vm.box = "ubuntu/trusty64"
+      kafka0.vm.hostname = "kafka0"
+      #kafka.vm.network "public_network"
+      kafka0.vm.synced_folder "data", "/vagrant_data"
+      #kafka.vm.network "forwarded_port", guest: 80, host: 9090
+      kafka0.vm.network "private_network", ip: "10.11.1.101"
+      #kafka.vm.network "public_network", ip: "10.17.198.104", netmask: "255.255.248.0"
+      kafka0.vm.provider "virtualbox" do |vb|
+     #   # Display the VirtualBox GUI when booting the machine
+     #   vb.gui = true
+     #
+     #   # Customize the amount of memory on the VM:
+        vb.memory = "1256"
+      end
+
+      kafka0.vm.provision "shell", inline: <<-SHELL
+        KAFKA=kafka_2.11-0.10.2.0
+
+        echo "Config Kafka"
+        sudo rm $KAFKA/config/server.properties
+        sudo cp /vagrant_data/server0.properties $KAFKA/config/server.properties
+
+        #Ejecutamos Kafka
+        echo 'Ejecutamos Kafka'
+        sudo $KAFKA/bin/kafka-server-start.sh -daemon $KAFKA/config/server.properties
+
+        #Test
+        echo 'Comprobamos que el proceso de Kafka esta ejecutandose'
+        sudo ps aux | grep kafka
+
+       SHELL
+
+  end
+
+  config.vm.define "vm_kafka1" do |kafka1|
+      kafka1.vm.box = "ubuntu/trusty64"
+      kafka1.vm.hostname = "kafka1"
+      #kafka1.vm.network "public_network"
+      kafka1.vm.synced_folder "data", "/vagrant_data"
+      kafka1.vm.network "private_network", ip: "10.11.1.102"
+      #kafka1.vm.network "public_network", ip: "10.17.197.59", netmask: "255.255.248.0"
+      #kafka0.vm.network "forwarded_port", guest: 80, host: 9090
+
+      kafka1.vm.provider "virtualbox" do |vb|
+     #   # Display the VirtualBox GUI when booting the machine
+     #   vb.gui = true
+     #
+     #   # Customize the amount of memory on the VM:
+        vb.memory = "1256"
+      end
+      kafka1.vm.provision "shell", inline: <<-SHELL
+         KAFKA=kafka_2.11-0.10.2.0
+         echo "Config Kafka"
+         sudo rm $KAFKA/config/server.properties
+         sudo cp /vagrant_data/server1.properties $KAFKA/config/server.properties
+         #Ejecutamos Kafka
+         echo 'Ejecutamos Kafka'
+         sudo $KAFKA/bin/kafka-server-start.sh -daemon $KAFKA/config/server.properties
+
+         #Test
+         echo 'Comprobamos que el proceso de Kafka esta ejecutandose'
+         sudo ps aux | grep kafka
+
+      SHELL
+  end
+
+
+    config.vm.define "vm_kafka2" do |kafka2|
+        kafka2.vm.box = "ubuntu/trusty64"
+        kafka2.vm.hostname = "kafka2"
+        #kafka2.vm.network "public_network"
+        kafka2.vm.synced_folder "data", "/vagrant_data"
+        kafka2.vm.network "private_network", ip: "10.11.1.103"
+        #kafka2.vm.network "public_network", ip: "10.17.196.234", netmask: "255.255.248.0"
+        #kafka0.vm.network "forwarded_port", guest: 80, host: 9090
+
+        kafka2.vm.provider "virtualbox" do |vb|
+       #   # Display the VirtualBox GUI when booting the machine
+       #   vb.gui = true
+       #
+       #   # Customize the amount of memory on the VM:
+          vb.memory = "1256"
+        end
+        kafka2.vm.provision "shell", inline: <<-SHELL
+          KAFKA=kafka_2.11-0.10.2.0
+          echo "Config Kafka"
+          sudo rm $KAFKA/config/server.properties
+          sudo cp /vagrant_data/server2.properties $KAFKA/config/server.properties
+          #Ejecutamos Kafka
+          echo 'Ejecutamos Kafka'
+          sudo $KAFKA/bin/kafka-server-start.sh -daemon $KAFKA/config/server.properties
+
+          #Test
+          echo 'Comprobamos que el proceso de Kafka esta ejecutandose'
+          sudo ps aux | grep kafka
+
+        SHELL
+    end
+
+
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  # config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #   vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "2048"
+  # end
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+
+  # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
+  # such as FTP and Heroku are also available. See the documentation at
+  # https://docs.vagrantup.com/v2/push/atlas.html for more information.
+  # config.push.define "atlas" do |push|
+  #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
+  # end
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  config.vm.provision "shell", path: "script.sh"
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+end
