@@ -43,7 +43,7 @@ Communication manager that allows to handle the different messages (sms, mail, p
 
 
 #### Start
-```javascript
+```
 $ mvn clean package
 ...
 [INFO] --- spring-boot-maven-plugin:1.5.3.RELEASE:repackage (default) @ cm-eureka-server ---
