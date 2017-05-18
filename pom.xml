@@ -29,6 +29,7 @@
 		<module>cm-mail-gateway</module>
 		<module>cm-mail-processing</module>
 		<module>cm-config-server</module>
+		<module>cm-eureka-server</module>
 	</modules>
 
 	<dependencies>

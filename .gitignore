@@ -3,5 +3,6 @@
 .settings
 target/
 .mvn/
+.idea/
 cm-mail-gateway/logs
-
+cm-bbva-project.iml
